@@ -1,0 +1,18 @@
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install libasound-dev
+sudo apt-get install sox
+sudo apt-get install espeak
+
+download portaudio http://www.portaudio.com/download.html
+un-tar, change directory
+./configure
+make
+sudo make install
+sudo ldconfig
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+ echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/" >> ~/.bashrc
+
+sudo apt-get install portaudio19-dev
+sudo apt-get install python-all-dev
+sudo pip install pyaudio
