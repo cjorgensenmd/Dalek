@@ -2,12 +2,25 @@
 """Test script for using pygame to read in ds4 controller
 with ds4drv  running as a daemon
 DS4  controller axis maps:
-Axis0: Left stick l-r (-1 left, 1 right)
-Axis1: Left stick u-d (-1 up, 1 down)
-Axis2: Left trigger (-1 unpressed, 1 completely pressed)
-Axis3: Right stick l-r (-1 left, 1 right)
-Axis4: Right stick u-d (-1 up, 1 down)
-Axis5: Right trigger (-1 unpressed, 1 completely pressed)
+X 1
+Square 0
+O 2
+Triangle 3
+R1 5
+L1 4
+R2 7 and axis 4
+L2 axis 3 and button 6
+R stick button 11
+L stick button 10
+Options 9
+Share 8
+D pad hat
+Click 13
+PS 12
+L stick L/R axis 0 (L -1 R 1)
+L stick up/down axis 1 (up -1 down 1)
+R stick L/R axis 2 (L -1 R 1)
+R stick up/down axis 5 (up -1 down 1)
 """
 import RPi.GPIO as GPIO
 import os  
