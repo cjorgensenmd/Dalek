@@ -12,6 +12,7 @@ sudo apt-get install raspberrypi-kernel-headers
 sudo apt-get install linux-headers-3.6-trunk-rpi
 sudo apt-get install python-dev python-pip gcc
 sudo apt-get install python-pyudev
+sudo apt-get install libsbc-dev
 
 
 download portaudio http://www.portaudio.com/download.html
