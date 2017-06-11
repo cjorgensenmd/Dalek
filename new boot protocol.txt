@@ -3,6 +3,16 @@ sudo apt-get upgrade
 sudo apt-get install libasound-dev
 sudo apt-get install sox
 sudo apt-get install espeak
+sudo apt-get install swig
+sudo apt-get install swig3.0
+sudo apt-get install libboost-dev
+sudo apt-get install libpulse-dev
+sudo apt-get install linux-headers-3.10-3-rpi
+sudo apt-get install raspberrypi-kernel-headers
+sudo apt-get install linux-headers-3.6-trunk-rpi
+sudo apt-get install python-dev python-pip gcc
+sudo apt-get install python-pyudev
+
 
 download portaudio http://www.portaudio.com/download.html
 un-tar, change directory
@@ -16,3 +26,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 sudo apt-get install portaudio19-dev
 sudo apt-get install python-all-dev
 sudo pip install pyaudio
+
+
+git clone https://github.com/cjorgensenmd/ds4drv.git
+cd ds4drv
+sudo python setup.py build
