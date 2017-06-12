@@ -1,20 +1,26 @@
-# Python 2.7 code to analyze sound and output volume levels
+# Python 3 code to analyze sound and output volume levels
 
 import pyaudio # from http://people.csail.mit.edu/hubert/pyaudio/
 import numpy   # from http://numpy.scipy.org/
 import audioop
+import RPi.GPIO as GPIO
+#setting up GPIO in broadcom mode, using pin 21 as output
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(21, GPIO.OUT)
 
 def volumelevels(): 
     chunk      = 2**11 # Change if too fast/slow, never less than 2**11
     scale      = 50    # Change if too dim/bright
     exponent   = 5     # Change if too little/too much difference between loud and quiet sounds
     samplerate = 44100 
+    led = GPIO.PWM(21, 100) #LED output pin 21 PWM mode at 100Hz
+    led.start(0)
  
     # CHANGE THIS TO CORRECT INPUT DEVICE
     # Enable stereo mixing in your sound card
     # to make you sound output an input
     # Use list_devices() to list all your input devices
-    device   = 0  
+    device   = 1  
     
     p = pyaudio.PyAudio()
     stream = p.open(format = pyaudio.paInt16,
@@ -35,10 +41,10 @@ def volumelevels():
  
             level = min(rms / (2.0 ** 16) * scale, 1.0) 
             level = level**exponent 
-            level = int(level * 255)
+            level = int(level * 100)
  
             print (level)
-       
+            led.ChangeDutyCycle(level)
     except KeyboardInterrupt:
         pass
     finally:
