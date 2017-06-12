@@ -44,13 +44,16 @@ def volumelevels():
             level = int(level * 100)
  
             print (level)
-            led.ChangeDutyCycle(level)
+            #changes brightness based on audio level
+            led.ChangeDutyCycle(level) 
     except KeyboardInterrupt:
         pass
     finally:
         print ("\nStopping")
         stream.close()
         p.terminate()
-       
+        led.stop()
+        GPIO.cleanup()       
 
 volumelevels()
+
