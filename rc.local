@@ -1,0 +1,27 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+#runs light flashers to audio output
+#sudo python /home/pi/Desktop/DOMELIGHTS.py &
+#sudo python /home/pi/soundboard/domemotorsandsounds.py &
+
+#starts bluetooth pair to arduino
+sudo rfcomm connect hci0 00:14:03:06:27:56 1 &
+echo "connect 00:14:03:06:27:56 \nquit" | bluetoothctl &
+
+exit 0
