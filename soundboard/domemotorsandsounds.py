@@ -14,6 +14,18 @@ GPIO.setup(13, GPIO.OUT)
 GPIO.setup(19, GPIO.OUT)
 GPIO.setup(26, GPIO.OUT)
 
+#setting up counter for press down events
+global count
+count = 0
+
+#set up drive states
+global parked
+global driving
+global brakes
+brakes = TRUE
+parked = TRUE
+driving = FALSE
+
 #set up serial connection
 ser = serial.Serial('/dev/ttyACM0',9600)
 global serialstring
@@ -76,6 +88,10 @@ def Dualshock4Init():
 def motors():
     global DS4
     global serialstring
+    global count
+    global parked
+    global driving
+    global brakes
     print ('Press CTRL+C to quit')
     M1 = GPIO.PWM(13, 100) #Motor 1 output pin 5 PWM mode at 100Hz
     M2 = GPIO.PWM(26, 100) #Motor 2 output pin 13 PWM mode at 100Hz
@@ -135,6 +151,34 @@ def motors():
                 GPIO.output(19,0)
                 Dir2 = 0
             M2.ChangeDutyCycle(RSUDamp)
+            
+            #PS button
+            if PS and count>=20:
+                if parked and not driving:
+                    driving = TRUE
+                    parked = FALSE
+                    print("Driving mode Activated!")
+                 elif driving and not parked:
+                    driving = FALSE
+                    parked = TRUE
+                    print("Parking mode Activated!")
+                 else:
+                    driving = FALSE                    
+                    parked = TRUE
+            elif PS and count<=19:
+                count = int(count+1)
+            else:
+                count = 0
+                
+            #wheelchair motors
+            speed = int((L2+1)*50) 
+            if parked:
+                brakes = TRUE
+            elif driving and not PS:
+            
+            elif driving and PS:
+                brakes = TRUE
+                
 
             
 
