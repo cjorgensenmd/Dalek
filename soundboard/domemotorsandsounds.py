@@ -23,6 +23,12 @@ serialstring = '<0,0,0,0,0,0,0>'
 global count
 count = 0
 
+global count1
+count1 = 0
+
+global count2
+count1 = 0
+
 #set up drive states
 global parked
 global driving
@@ -90,6 +96,8 @@ def motors():
     global DS4
     global serialstring
     global count
+    global count1
+    global count2
     global parked
     global driving
     global brakes
@@ -129,8 +137,8 @@ def motors():
             PS = DS4.get_button(12)
             Share = DS4.get_button(8)
             Options = DS4.get_button(9)
-            #Dpad1 = DS4.get_hat(0)
-            #Dpad2 =  DS4.get_hat(0)
+            Dpad = DS4.get_hat(0)
+            
             
             # code for Dome Motors
             RSLR = int(RSLR*99)
@@ -186,7 +194,21 @@ def motors():
                 
 
             #front eye
-            eye = int((R2+1)*120)
+            if count1<99:
+                eye = int(count1*2.5)
+                count1 = count1+1
+            elif count1>=99 and count1<200:
+                eye = int(350-count1)
+                count1 = count1+1
+            elif count1>=200:
+                if Dpad == (-1,1) or Dpad == (0,1) or Dpad == (1,1) and eye<=250:
+                    eye = eye +5
+                elif Dpad == (-1,-1) or Dpad == (0,-1) or Dpad == (1,-1) and eye>=5:
+                    eye = eye-5
+                elif eye>=255:
+                    eye = 255
+                elif eye<0:
+                    eye = 0
 
             #Ears
             if R1:
@@ -249,7 +271,7 @@ def motors():
 
             serialstring = '<%d,%d,%d,%d,%d,%d,%d>'%(eye,servo,ear,M1arduino,Dir1,M2arduino,Dir2)
 
-            print(count)
+            print(eye,count1)
             try:
                 ser.write(serialstring)
             except:
