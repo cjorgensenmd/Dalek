@@ -39,6 +39,8 @@ int integerFromPC = 0;
 
 
 boolean newData = false;
+boolean beaconmode = true;
+boolean connectedmode = false
 
 void recvWithStartEndMarkers() {
     static boolean recvInProgress = false;
@@ -178,6 +180,47 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+if (beaconmode) {
+     delay(1000);
+     Serial.write('*');
+      rc=Serial.read();
+     // Serial.read() and check for "I_hear_you"
+     if (rc=='ping') {
+       beaconmode = false;
+       delay(50)
+       Serial.write('gotcha');
+       delay(50)
+       Serial.write('gotcha');
+       delay(50)
+       Serial.write('gotcha');
+       delay(50)
+       Serial.write('gotcha');
+       delay(50)
+       Serial.write('gotcha');
+       delay(50)
+       Serial.write('gotcha');
+       // now the two devices are "connected"
+       connectedmode = true;
+   }
+if (connectedmode) {
+  recvWithStartEndMarkers();
+    if (newData == true) {
+      strcpy(tempChars, receivedChars);
+            // this temporary copy is necessary to protect the original data
+            //   because strtok() used in parseData() replaces the commas with \0
+      parseData();
+      newData = false;
+    }
+ eyestalkmotor();
+ rotationmotor();
+ iris();
+ eyelight();
+ earlight();
+         
+     // do normal stuff
+   }
+}
+      
 recvWithStartEndMarkers();
   if (newData == true) {
     strcpy(tempChars, receivedChars);
