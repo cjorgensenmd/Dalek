@@ -1,3 +1,14 @@
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+// Depending on your servo make, the pulse width min and max may vary, you 
+// want these to be as small/large as possible without hitting the hard stop
+// for max range. You'll have to tweak them as necessary to match the servos you
+// have!
+#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX  600 // this is the 'maximum' pulse length count (out of 4096)
+uint8_t servonum = 0;
+
 const int eyepin = 11;
 const int servopin = 10;
 const int earpin = 9;
@@ -100,8 +111,8 @@ void parseData() {      // split the data into its parts
       eye=255;}
     else if (eye<=0){
       eye=0;}
-    if (servo>=255){
-      servo=255;}
+    if (servo>=100){
+      servo=100;}
     else if (servo<=0){
       servo=0;}
     if (ear>=255){
@@ -143,6 +154,8 @@ void showParsedData() {
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  pwm.begin();
+  pwm.setPWMFreq(1000);
   
   pinMode(eyepin, OUTPUT);
   pinMode(servopin, OUTPUT);
@@ -220,8 +233,8 @@ digitalWrite(Dir1pin,Dir1);
 }
 //==================================================
 void iris() {
-  servo = servo;
-analogWrite(servopin,servo);
+  pulselength = map(servo, 0, 180, SERVOMIN, SERVOMAX);
+  pwm.setPWM(0, 0, pulselength)
 
 }
 //============================================
