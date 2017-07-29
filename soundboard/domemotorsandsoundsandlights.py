@@ -1,3 +1,4 @@
+#! /usr/bin/python
 import os  
 import pygame
 import pygame.mixer
@@ -18,10 +19,6 @@ GPIO.setup(13, GPIO.OUT)
 GPIO.setup(19, GPIO.OUT)
 GPIO.setup(26, GPIO.OUT)
 
-#set up serial connection
-ser = serial.Serial("/dev/rfcomm0", baudrate=9600)
-global serialstring
-serialstring = '<0,0,0,0,0,0,0>'
 
 #setting up counter for press down events
 global count
@@ -31,7 +28,7 @@ global count1
 count1 = 0
 
 global count2
-count1 = 0
+count2 = 0
 
 #set up drive states
 global parked
@@ -41,6 +38,8 @@ brakes = True
 parked = True
 driving = False
 
+#serial connection stuff
+global ser
 
 #setup pygame mixer and soundboard
 pygame.init()
@@ -74,6 +73,36 @@ basicfont = pygame.font.SysFont(None, 48)
 
 
 global DS4 #create global variable
+
+def Connect():
+    global ser
+    global serialstring
+    serialstring = '<0,0,0,0,0,0,0>'
+    connected = False
+    while not connected:
+        try:
+            ser = serial.Serial("/dev/rfcomm0", baudrate=9600,timeout=5)
+            beacon = ser.read()
+            if beacon =='k':
+                connected = True
+                ser.write(serialstring)
+                print 'Arduino Connected'
+                return True
+                break
+            elif beacon =='*':
+                ser.write('p')
+                return False
+                print 'Arduino Detected'
+            else:
+                return False
+                ser.close()
+                                
+        except serial.SerialException as e:
+            print(e)
+            return False
+            ser.close()
+            pass
+            
 
 def Dualshock4Init():
     global DS4
@@ -115,6 +144,26 @@ def list_devices():
         if dev['maxInputChannels'] > 0:
             print( str(i)+'. '+dev['name'])
         i += 1
+def GUI(eye,servo,ear,M1arduino,Dir1,M2arduino,Dir2,parked,brakes,speed):
+    # set up the window
+    screen = pygame.display.set_mode((630,630))
+    pygame.display.set_caption('DALEK')
+    bg = pygame.image.load("/home/pi/Desktop/background.jpg")
+    basicfont = pygame.font.SysFont(None, 48)
+    earcolor = (ear,ear,0)
+    eyecolor =pygame.Color(0,0,eye)
+    radius = int(servo/3.4)
+    
+    screen.blit(bg,(0,0))
+    pygame.draw.circle(screen, (0,0,0), (312, 116), 30, 0)
+    pygame.draw.circle(screen, eyecolor, (312, 116), radius, 0)
+    pygame.draw.polygon(screen,earcolor,[(168,123),(135,87),(148,68),(193,93)],0)
+    pygame.draw.polygon(screen,earcolor,[(450,123),(483,87),(470,68),(425,93)],0)                        
+    screen.blit(text,(0,0))
+    screen.blit(text2,(150,0))
+    screen.blit(text3,(350,0))
+    pygame.display.update()
+    
     
 def dome():
     global DS4
@@ -378,4 +427,5 @@ def dome():
             
 list_devices()
 Dualshock4Init()
-dome()    
+Connect()
+dome() 
