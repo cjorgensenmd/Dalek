@@ -185,20 +185,20 @@ if (beaconmode) {
      Serial.write('*');
       rc=Serial.read();
      // Serial.read() and check for "I_hear_you"
-     if (rc=='ping') {
+     if (rc=='p') {
        beaconmode = false;
        delay(50)
-       Serial.write('gotcha');
+       Serial.write('k');
        delay(50)
-       Serial.write('gotcha');
+       Serial.write('k');
        delay(50)
-       Serial.write('gotcha');
+       Serial.write('k');
        delay(50)
-       Serial.write('gotcha');
+       Serial.write('k');
        delay(50)
-       Serial.write('gotcha');
+       Serial.write('k');
        delay(50)
-       Serial.write('gotcha');
+       Serial.write('k');
        // now the two devices are "connected"
        connectedmode = true;
    }
