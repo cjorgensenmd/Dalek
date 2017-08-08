@@ -40,6 +40,7 @@ driving = False
 
 #serial connection stuff
 global ser
+ser = serial.Serial("/dev/rfcomm0", baudrate=9600,timeout=5)
 
 #setup pygame mixer and soundboard
 pygame.init()
@@ -198,6 +199,7 @@ def dome():
                     frames_per_buffer = chunk,
                     input_device_index = device)
                     '''
+                    
     if not DS4.get_init():
         print("re-initializing controller")
         DS4.init()
@@ -240,8 +242,9 @@ def dome():
             rms   = audioop.rms(data, 2)
  
             level = min(rms / (2.0 ** 16) * scale, 1.0) 
-            level = level**exponent
-            '''                       
+            #level = level**exponent
+            print(level)
+            ''' 
             if R1:
                 ear=int(255)
             else:
@@ -340,14 +343,14 @@ def dome():
             eyecolor =pygame.Color(0,0,eye)
 
             #Iris
-            servo = 100
+            servo = 0
             amplitude = int((R2+1)*50)
             if R3:
-                servo = 0
+                servo = 100
             else:
-                servo = 100-amplitude
+                servo = amplitude
 
-            radius = int(servo/3.4)
+            radius = int((100-servo)/3.4)
                        
 
             #Code for soundboard
@@ -412,11 +415,12 @@ def dome():
             screen.blit(text3,(350,0))
             
             pygame.display.update()
+            
             try:
                 ser.write(serialstring)
             except:
                 pass
-               
+                          
 
             sleep(0.1) #limit the frequency to 10Hz              
         except KeyboardInterrupt:
@@ -427,5 +431,5 @@ def dome():
             
 list_devices()
 Dualshock4Init()
-Connect()
-dome() 
+#Connect()
+dome()    
