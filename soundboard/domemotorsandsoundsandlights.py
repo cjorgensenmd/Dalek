@@ -354,6 +354,8 @@ def dome():
                        
 
             #Code for soundboard
+            if Options and pygame.mixer.get_busy():
+                pygame.mixer.stop()
             if Triangle and L1 and not pygame.mixer.get_busy(): #checks to see if button is pressed and sound is already playing or not
                 soundChannelE.play(sndE)
                 print("Playing sndE!")
